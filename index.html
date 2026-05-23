@@ -482,6 +482,66 @@
     .attendee-cards { gap:8px; }
     .attendee-card { padding:10px 14px; }
   }
+
+  /* ─── SONG QUEST STYLES ─── */
+  .song-step {
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(240,192,96,0.25);
+    border-radius:50px; padding:7px 18px;
+    font-size:0.78rem; font-family:'Space Mono',monospace;
+    color:#9080c0; cursor:pointer; transition:all 0.3s;
+  }
+  .song-step:hover { border-color:var(--gold); color:var(--gold); }
+  .song-step.active { background:rgba(240,192,96,0.15); border-color:var(--gold); color:var(--gold); }
+  .song-step.done { background:rgba(78,205,196,0.12); border-color:var(--teal); color:var(--teal); }
+
+  .song-panel {
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px; padding:20px;
+    margin-bottom:16px;
+  }
+  .song-label {
+    font-family:'Space Mono',monospace;
+    font-size:0.72rem; color:var(--teal);
+    letter-spacing:2px; margin-bottom:6px;
+  }
+  .song-title-text {
+    font-family:'Cinzel Decorative',serif;
+    font-size:clamp(1rem,3vw,1.4rem);
+    color:var(--gold); margin-bottom:8px;
+  }
+  .sing-instruction {
+    font-size:0.85rem; color:#c0b0d8;
+    font-style:italic; margin-bottom:14px;
+  }
+  .yt-wrap {
+    position:relative; padding-bottom:56.25%;
+    height:0; overflow:hidden;
+    border-radius:14px; margin-bottom:14px;
+    border:2px solid rgba(240,192,96,0.2);
+  }
+  .yt-wrap iframe {
+    position:absolute; top:0; left:0;
+    width:100%; height:100%; border-radius:12px;
+  }
+  .song-question-box {
+    background:rgba(61,26,110,0.3);
+    border:1px solid rgba(232,100,154,0.3);
+    border-radius:14px; padding:18px; margin-top:10px;
+    animation:chipPop 0.4s ease;
+  }
+  .sq-label {
+    font-family:'Space Mono',monospace;
+    font-size:0.72rem; color:var(--rose);
+    letter-spacing:2px; margin-bottom:6px;
+  }
+  .sq-text {
+    font-size:1rem; color:var(--cream);
+    margin-bottom:14px; line-height:1.5;
+  }
+  .sq-options { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; }
+  .riddle-input-wrap { width:100%; text-align:center; }
 </style>
 </head>
 <body>
@@ -566,37 +626,97 @@
 ════════════════════════════════════════ -->
 <div class="screen" id="quest1">
   <button class="back-btn" onclick="showScreen('hub')">← Hub</button>
-  <div class="quest-screen">
+  <div class="quest-screen" style="max-width:740px">
     <div class="quest-header">
       <div class="quest-number">QUEST 01</div>
       <div class="quest-title">🎵 The Lullaby</div>
-      <div class="quest-desc">A poem holds a secret. Read between the lines...</div>
+      <div class="quest-desc">Sing along to all 3 songs, then answer each question to collect your quest code!</div>
     </div>
 
-    <div class="lullaby-clue">
-      "Hush little one, soon you'll arrive,<br>
-      A <em>tiny</em> heart that will make us thrive.<br>
-      Soft as the dawn and sweet as the dew,<br>
-      We've been waiting so long, little one, for you.<br><br>
-      The <em>moon</em> sings gently, the stars light the way,<br>
-      A miracle blooms with each passing day.<br>
-      From the <em>first</em> little kick to the final embrace,<br>
-      Heaven sent you to fill this space."
+    <!-- SONG PROGRESS -->
+    <div style="display:flex;justify-content:center;gap:10px;margin-bottom:20px;flex-wrap:wrap">
+      <div class="song-step" id="sstep1" onclick="switchSong(1)">🎶 Song 1</div>
+      <div class="song-step" id="sstep2" onclick="switchSong(2)">🎶 Song 2</div>
+      <div class="song-step" id="sstep3" onclick="switchSong(3)">🎶 Song 3</div>
     </div>
 
-    <p style="color:#9080b0;margin:10px 0;font-size:0.9rem;">🔍 Which word from the lullaby is the hidden key? (First word of each stanza)</p>
-
-    <div class="lullaby-answer" id="lullabyOptions">
-      <button class="answer-btn" onclick="checkLullaby('Hush')">Hush</button>
-      <button class="answer-btn" onclick="checkLullaby('Tiny')">Tiny</button>
-      <button class="answer-btn" onclick="checkLullaby('Moon')">Moon</button>
-      <button class="answer-btn" onclick="checkLullaby('Miracle')">Miracle</button>
+    <!-- ── SONG 1: Old McDonald ── -->
+    <div class="song-panel" id="spanel1">
+      <div class="song-label">🐄 Song 1 of 3</div>
+      <h3 class="song-title-text">Old McDonald Had a Farm</h3>
+      <p class="sing-instruction">🎤 Everyone sing along together!</p>
+      <div class="yt-wrap">
+        <iframe src="https://www.youtube.com/embed/5VYAaFKNHRo?rel=0" title="Old McDonald Had a Farm" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="song-question-box" id="sq1" style="display:none">
+        <p class="sq-label">🐾 Song 1 Question:</p>
+        <p class="sq-text">How many animals are there in the song?</p>
+        <div class="sq-options">
+          <button class="answer-btn" onclick="checkSongQ(1,this,'3')">3 animals</button>
+          <button class="answer-btn" onclick="checkSongQ(1,this,'5')">5 animals</button>
+          <button class="answer-btn" onclick="checkSongQ(1,this,'6')">6 animals</button>
+          <button class="answer-btn" onclick="checkSongQ(1,this,'8')">8 animals</button>
+        </div>
+        <div class="feedback" id="sq1Feedback"></div>
+      </div>
+      <div style="text-align:center;margin-top:16px" id="sq1trigger">
+        <button class="btn-sm" onclick="revealSongQ(1)">We're done singing! Answer the question 🐄</button>
+      </div>
     </div>
 
-    <div class="feedback" id="lullabyFeedback"></div>
+    <!-- ── SONG 2: Wheels on the Bus ── -->
+    <div class="song-panel" id="spanel2" style="display:none">
+      <div class="song-label">🚌 Song 2 of 3</div>
+      <h3 class="song-title-text">The Wheels on the Bus</h3>
+      <p class="sing-instruction">🎤 Everyone sing along together!</p>
+      <div class="yt-wrap">
+        <iframe src="https://www.youtube.com/embed/e_04ZrNroTo?rel=0" title="Wheels on the Bus" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="song-question-box" id="sq2" style="display:none">
+        <p class="sq-label">🚌 Song 2 Question:</p>
+        <p class="sq-text">Who is the driver of the Bus?</p>
+        <div class="sq-options">
+          <div class="riddle-input-wrap">
+            <input class="riddle-input" id="busDriverInput" type="text" placeholder="Type the driver's name..."
+              oninput="this.value=this.value.charAt(0).toUpperCase()+this.value.slice(1)"/>
+            <br><br>
+            <button class="btn-sm" onclick="checkBusDriver()">Submit Answer 🚌</button>
+          </div>
+        </div>
+        <div class="feedback" id="sq2Feedback"></div>
+      </div>
+      <div style="text-align:center;margin-top:16px" id="sq2trigger">
+        <button class="btn-sm" onclick="revealSongQ(2)">We're done singing! Answer the question 🚌</button>
+      </div>
+    </div>
 
+    <!-- ── SONG 3: Sa Ugoy ng Duyan ── -->
+    <div class="song-panel" id="spanel3" style="display:none">
+      <div class="song-label">🌙 Song 3 of 3</div>
+      <h3 class="song-title-text">Sa Ugoy ng Duyan</h3>
+      <p class="sing-instruction">🎤 Everyone sing along together!</p>
+      <div class="yt-wrap">
+        <iframe src="https://www.youtube.com/embed/Cs3EHBPp4HA?rel=0" title="Sa Ugoy ng Duyan" frameborder="0" allowfullscreen></iframe>
+      </div>
+      <div class="song-question-box" id="sq3" style="display:none">
+        <p class="sq-label">🌙 Song 3 Question:</p>
+        <p class="sq-text">What is the English word for <em>"Duyan"</em>?</p>
+        <div class="sq-options">
+          <button class="answer-btn" onclick="checkSongQ(3,this,'Hammock')">Hammock</button>
+          <button class="answer-btn" onclick="checkSongQ(3,this,'Cradle')">Cradle</button>
+          <button class="answer-btn" onclick="checkSongQ(3,this,'Swing')">Swing</button>
+          <button class="answer-btn" onclick="checkSongQ(3,this,'Nest')">Nest</button>
+        </div>
+        <div class="feedback" id="sq3Feedback"></div>
+      </div>
+      <div style="text-align:center;margin-top:16px" id="sq3trigger">
+        <button class="btn-sm" onclick="revealSongQ(3)">We're done singing! Answer the question 🌙</button>
+      </div>
+    </div>
+
+    <!-- QUEST COMPLETE BANNER -->
     <div class="quest-complete-banner" id="q1Banner">
-      <div>🎉 Quest Complete! Your word is...</div>
+      <div>🎉 All 3 Songs Complete! Your quest code is...</div>
       <div class="word-reveal" id="q1Word"></div>
     </div>
   </div>
@@ -841,7 +961,7 @@ const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
 
 // ─── ANSWERS (the secret words from each quest) ───
 const QUEST_WORDS = {
-  1: 'TINY',       // Q1 Lullaby
+  1: 'SINGKAMAS',  // Q1 Lullaby
   2: 'LOVE',       // Q2 Toolkit
   3: 'WELCOME',    // Q3 Quiz
   4: 'BABY'        // Q4 Riddle
@@ -962,29 +1082,75 @@ function showFeedback(id, msg, type){
   el.textContent=msg; el.className='feedback '+type;
 }
 
-// ════ QUEST 1: LULLABY ════
-function checkLullaby(choice){
-  if(state.completed[1]) return;
-  const btns = document.querySelectorAll('.lullaby-answer .answer-btn');
-  btns.forEach(b=>{
-    b.classList.remove('selected','correct','wrong');
-    if(b.textContent===choice) b.classList.add('selected');
+// ════ QUEST 1: LULLABY / SONG QUEST ════
+const songQState = { 1: false, 2: false, 3: false };
+
+function switchSong(n){
+  [1,2,3].forEach(i=>{
+    document.getElementById('spanel'+i).style.display = (i===n)?'block':'none';
+    const step = document.getElementById('sstep'+i);
+    step.classList.remove('active');
+    if(songQState[i]) step.classList.add('done');
+  });
+  document.getElementById('sstep'+n).classList.add('active');
+}
+
+function revealSongQ(n){
+  document.getElementById('sq'+n).style.display='block';
+  document.getElementById('sq'+n+'trigger').style.display='none';
+}
+
+// Song 1: Old McDonald — correct answer is 5 (commonly counted: cow, pig, duck, horse, sheep)
+function checkSongQ(songNum, el, answer){
+  const feedbackId = 'sq'+songNum+'Feedback';
+  const correctAnswers = { 1:'5', 3:'Hammock' };
+  const correct = correctAnswers[songNum];
+
+  // Disable all buttons in this group
+  el.closest('.sq-options').querySelectorAll('.answer-btn').forEach(b=>{
+    b.style.pointerEvents='none';
+    if(b.textContent.trim()===correct) b.classList.add('correct');
   });
 
-  setTimeout(()=>{
-    if(choice==='Tiny'){
-      btns.forEach(b=>{
-        if(b.textContent==='Tiny') b.classList.add('correct');
-      });
-      showFeedback('lullabyFeedback','✨ Correct! "Tiny" is the hidden key — the first describing word of the lullaby!','success');
+  if(answer===correct){
+    showFeedback(feedbackId,'✨ Correct! Great job! Move to the next song 🎵','success');
+    songQState[songNum]=true;
+    document.getElementById('sstep'+songNum).classList.add('done');
+    el.classList.add('correct');
+    checkAllSongsDone();
+  } else {
+    el.classList.add('wrong');
+    showFeedback(feedbackId,'Not quite! The right answer is highlighted above 👆','error');
+    // Still mark as attempted and allow moving on
+    setTimeout(()=>{ songQState[songNum]=true; document.getElementById('sstep'+songNum).classList.add('done'); checkAllSongsDone(); },1500);
+  }
+}
+
+function checkBusDriver(){
+  if(songQState[2]) return;
+  const val = document.getElementById('busDriverInput').value.trim();
+  const feedbackId = 'sq2Feedback';
+  if(!val){ showFeedback(feedbackId,'Please type the driver\'s name!','info'); return; }
+  if(val.toLowerCase()==='iftaqar'){
+    showFeedback(feedbackId,'🚌 That\'s right! Iftaqar is the driver! Move to the next song 🎵','success');
+    songQState[2]=true;
+    document.getElementById('sstep2').classList.add('done');
+    document.getElementById('busDriverInput').style.borderColor='var(--teal)';
+    checkAllSongsDone();
+  } else {
+    showFeedback(feedbackId,'Hmm, not the right name! Think about who\'s behind the wheel... 🚌','error');
+    // After 2 wrong tries still allow progress
+    songQState[2]=true;
+    setTimeout(()=>{ document.getElementById('sstep2').classList.add('done'); checkAllSongsDone(); },2000);
+  }
+}
+
+function checkAllSongsDone(){
+  if(songQState[1] && songQState[2] && songQState[3]){
+    setTimeout(()=>{
       completeQuest(1);
-    } else {
-      btns.forEach(b=>{
-        if(b.textContent===choice) b.classList.add('wrong');
-      });
-      showFeedback('lullabyFeedback','Not quite... Listen more carefully to the first stanza 🎵','error');
-    }
-  },300);
+    },800);
+  }
 }
 
 // ════ QUEST 2: TOOLKIT ════
@@ -1238,6 +1404,8 @@ function loadProgress(){
 
 // ─── INIT ───
 loadProgress();
+// Initialize song tabs
+switchSong(1);
 </script>
 </body>
 </html>
