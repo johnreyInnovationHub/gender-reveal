@@ -610,9 +610,9 @@
 
   <div style="display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;max-width:400px">
     <button class="btn btn-quest" id="q1btn" onclick="showQuest(1)">🎵 Quest 1: The Lullaby</button>
-    <button class="btn btn-quest" id="q2btn" onclick="showQuest(2)">🍼 Quest 2: Baby Toolkit</button>
+    <button class="btn btn-quest" id="q2btn" onclick="showQuest(2)">🍼 Quest 2: Baby Toolkit Trivia</button>
     <button class="btn btn-quest" id="q3btn" onclick="showQuest(3)">🎯 Quest 3: Bet on Your Baby</button>
-    <button class="btn btn-quest" id="q4btn" onclick="showQuest(4)">🌙 Quest 4: Baby Riddle</button>
+    <button class="btn btn-quest" id="q4btn" onclick="showQuest(4)">👶 Quest 4: Who's Most Likely?</button>
     <hr class="section-divider" style="width:100%"/>
     <button class="btn btn-quest" id="finalBtn" onclick="showScreen('finalQuest')"
       style="border-color:var(--rose);color:var(--rose);font-size:0.9rem;">
@@ -715,6 +715,10 @@
     </div>
 
     <!-- QUEST COMPLETE BANNER -->
+    <div style="text-align:center;margin-top:8px">
+      <button class="btn-sm" onclick="resetLullaby()" style="background:rgba(255,255,255,0.05);">🔄 Reset Quest 1</button>
+    </div>
+
     <div class="quest-complete-banner" id="q1Banner">
       <div>🎉 All 3 Songs Complete! Your quest code is...</div>
       <div class="word-reveal" id="q1Word"></div>
@@ -723,50 +727,108 @@
 </div>
 
 <!-- ════════════════════════════════════════
-     SCREEN 4: QUEST 2 – BABY TOOLKIT
+     SCREEN 4: QUEST 2 – BABY TOOLKIT TRIVIA
 ════════════════════════════════════════ -->
 <div class="screen" id="quest2">
   <button class="back-btn" onclick="showScreen('hub')">← Hub</button>
   <div class="quest-screen">
     <div class="quest-header">
       <div class="quest-number">QUEST 02</div>
-      <div class="quest-title">🍼 Baby Toolkit</div>
-      <div class="quest-desc">Pick the 3 items you actually need for a newborn — in order of importance!</div>
+      <div class="quest-title">🍼 Baby Toolkit Trivia</div>
+      <div class="quest-desc">Unscramble the anagram to find the baby item! Answer all 8 to unlock your word.</div>
     </div>
 
-    <p style="color:#9080b0;font-size:0.85rem;margin-bottom:12px;text-align:center;">
-      Select: <strong style="color:var(--gold)">Diaper → Bottle → Blanket</strong> (in this exact order)
-    </p>
+    <div class="score-display">Score: <span id="triviaScore">0</span> / 8</div>
 
-    <div class="toolkit-grid" id="toolkitGrid">
-      <div class="tool-card" onclick="selectTool(this,'Diaper')" data-item="Diaper">
-        <div class="icon">👶</div><div class="label">Diaper</div>
+    <div id="triviaQuestions">
+      <!-- TQ1 -->
+      <div class="quiz-q" id="tq1">
+        <div class="q-text">1. Used to clean a newborn during diaper changes — comes in soft, moist sheets.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>YABB SEWIP</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(1,this,'Baby Wipes')">Baby Wipes</div>
+          <div class="quiz-opt" onclick="answerTrivia(1,this,'Baby Lotion')">Baby Lotion</div>
+          <div class="quiz-opt" onclick="answerTrivia(1,this,'Wet Cloth')">Wet Cloth</div>
+          <div class="quiz-opt" onclick="answerTrivia(1,this,'Tissue Paper')">Tissue Paper</div>
+        </div>
       </div>
-      <div class="tool-card" onclick="selectTool(this,'Bottle')" data-item="Bottle">
-        <div class="icon">🍼</div><div class="label">Bottle</div>
+      <!-- TQ2 -->
+      <div class="quiz-q" id="tq2">
+        <div class="q-text">2. Keeps a baby's nails short and safe, preventing scratches on their face.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>YABB LIAN MERMRIT</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(2,this,'Baby Nail Trimmer')">Baby Nail Trimmer</div>
+          <div class="quiz-opt" onclick="answerTrivia(2,this,'Baby Brush')">Baby Brush</div>
+          <div class="quiz-opt" onclick="answerTrivia(2,this,'Small Scissors')">Small Scissors</div>
+          <div class="quiz-opt" onclick="answerTrivia(2,this,'Nail File')">Nail File</div>
+        </div>
       </div>
-      <div class="tool-card" onclick="selectTool(this,'Blanket')" data-item="Blanket">
-        <div class="icon">🧸</div><div class="label">Blanket</div>
+      <!-- TQ3 -->
+      <div class="quiz-q" id="tq3">
+        <div class="q-text">3. Used by parents to check a baby's temperature safely and accurately.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>LAGITID YABB METROMHETER</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(3,this,'Digital Baby Thermometer')">Digital Baby Thermometer</div>
+          <div class="quiz-opt" onclick="answerTrivia(3,this,'Forehead Strip')">Forehead Strip</div>
+          <div class="quiz-opt" onclick="answerTrivia(3,this,'Bath Thermometer')">Bath Thermometer</div>
+          <div class="quiz-opt" onclick="answerTrivia(3,this,'Fever Patch')">Fever Patch</div>
+        </div>
       </div>
-      <div class="tool-card" onclick="selectTool(this,'Rattle')" data-item="Rattle">
-        <div class="icon">🔔</div><div class="label">Rattle</div>
+      <!-- TQ4 -->
+      <div class="quiz-q" id="tq4">
+        <div class="q-text">4. Soft absorbent cloth used to protect parents' shoulders during burping time.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>RUPB HOTLC</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(4,this,'Burp Cloth')">Burp Cloth</div>
+          <div class="quiz-opt" onclick="answerTrivia(4,this,'Baby Bib')">Baby Bib</div>
+          <div class="quiz-opt" onclick="answerTrivia(4,this,'Muslin Cloth')">Muslin Cloth</div>
+          <div class="quiz-opt" onclick="answerTrivia(4,this,'Hand Towel')">Hand Towel</div>
+        </div>
       </div>
-      <div class="tool-card" onclick="selectTool(this,'Pacifier')" data-item="Pacifier">
-        <div class="icon">🤫</div><div class="label">Pacifier</div>
+      <!-- TQ5 -->
+      <div class="quiz-q" id="tq5">
+        <div class="q-text">5. Helps soothe teething discomfort and is often made of silicone.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>TREEHE</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(5,this,'Teether')">Teether</div>
+          <div class="quiz-opt" onclick="answerTrivia(5,this,'Pacifier')">Pacifier</div>
+          <div class="quiz-opt" onclick="answerTrivia(5,this,'Rattle')">Rattle</div>
+          <div class="quiz-opt" onclick="answerTrivia(5,this,'Chew Toy')">Chew Toy</div>
+        </div>
       </div>
-      <div class="tool-card" onclick="selectTool(this,'Stroller')" data-item="Stroller">
-        <div class="icon">🛒</div><div class="label">Stroller</div>
+      <!-- TQ6 -->
+      <div class="quiz-q" id="tq6">
+        <div class="q-text">6. Used to gently remove mucus from a baby's nose.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>NASLA TRAROSIPA</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(6,this,'Nasal Aspirator')">Nasal Aspirator</div>
+          <div class="quiz-opt" onclick="answerTrivia(6,this,'Cotton Swab')">Cotton Swab</div>
+          <div class="quiz-opt" onclick="answerTrivia(6,this,'Saline Spray')">Saline Spray</div>
+          <div class="quiz-opt" onclick="answerTrivia(6,this,'Nose Drops')">Nose Drops</div>
+        </div>
+      </div>
+      <!-- TQ7 -->
+      <div class="quiz-q" id="tq7">
+        <div class="q-text">7. Used to carry diapers, wipes, bottles and clothes when going out.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>PARDIE GAB</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(7,this,'Diaper Bag')">Diaper Bag</div>
+          <div class="quiz-opt" onclick="answerTrivia(7,this,'Stroller Bag')">Stroller Bag</div>
+          <div class="quiz-opt" onclick="answerTrivia(7,this,'Backpack')">Backpack</div>
+          <div class="quiz-opt" onclick="answerTrivia(7,this,'Tote Bag')">Tote Bag</div>
+        </div>
+      </div>
+      <!-- TQ8 -->
+      <div class="quiz-q" id="tq8">
+        <div class="q-text">8. Soft wearable item that keeps a baby warm, often used right after bath time.<br><span style="font-size:0.8rem;color:var(--teal);font-family:'Space Mono',monospace">🔀 Anagram: <strong>YABB ODDEH LEWOT</strong></span></div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerTrivia(8,this,'Baby Hooded Towel')">Baby Hooded Towel</div>
+          <div class="quiz-opt" onclick="answerTrivia(8,this,'Baby Blanket')">Baby Blanket</div>
+          <div class="quiz-opt" onclick="answerTrivia(8,this,'Baby Robe')">Baby Robe</div>
+          <div class="quiz-opt" onclick="answerTrivia(8,this,'Sleep Sack')">Sleep Sack</div>
+        </div>
       </div>
     </div>
 
-    <p style="text-align:center;font-family:'Space Mono',monospace;font-size:0.8rem;color:var(--teal);min-height:24px" id="toolkitSelected">Selected: —</p>
-
-    <div style="text-align:center;margin-top:12px">
-      <button class="btn-sm" onclick="checkToolkit()">Lock In Answer</button>
-      <button class="btn-sm" onclick="resetToolkit()" style="margin-left:8px;background:rgba(255,255,255,0.05);">Reset</button>
+    <div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-sm" onclick="checkTrivia()">Submit Answers 🍼</button>
+      <button class="btn-sm" onclick="resetTrivia()" style="background:rgba(255,255,255,0.05);">🔄 Reset</button>
     </div>
 
-    <div class="feedback" id="toolkitFeedback"></div>
+    <div class="feedback" id="triviaFeedback"></div>
 
     <div class="quest-complete-banner" id="q2Banner">
       <div>🎉 Quest Complete! Your word is...</div>
@@ -784,62 +846,70 @@
     <div class="quest-header">
       <div class="quest-number">QUEST 03</div>
       <div class="quest-title">🎯 Bet on Your Baby</div>
-      <div class="quest-desc">Score 3 out of 4 to unlock the secret word!</div>
+      <div class="quest-desc">Guess the price of each baby item in AED! Get at least 3 right to unlock the secret word.</div>
     </div>
 
-    <div class="score-display">Score: <span id="quizScore">0</span> / 4</div>
+    <div class="score-display">Score: <span id="priceScore">0</span> / 5</div>
 
-    <div id="quizQuestions">
-      <!-- Q1 -->
-      <div class="quiz-q" id="qq1">
-        <div class="q-text">1. What's the most common craving during pregnancy?</div>
+    <div id="priceQuestions">
+      <!-- PQ1 -->
+      <div class="quiz-q" id="pq1">
+        <div class="q-text">🧷 How much is <strong>1 pack of Diapers</strong>?</div>
         <div class="quiz-options">
-          <div class="quiz-opt" onclick="answerQuiz(1,this,'Pickles & Ice Cream')">🥒 Pickles & Ice Cream</div>
-          <div class="quiz-opt" onclick="answerQuiz(1,this,'Spicy Food')">🌶️ Spicy Food</div>
-          <div class="quiz-opt" onclick="answerQuiz(1,this,'Sweets & Fruits')">🍓 Sweets & Fruits</div>
-          <div class="quiz-opt" onclick="answerQuiz(1,this,'Salty Chips')">🍟 Salty Chips</div>
+          <div class="quiz-opt" onclick="answerPrice(1,this,'30 AED')">30 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(1,this,'50 AED')">50 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(1,this,'75 AED')">75 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(1,this,'100 AED')">100 AED</div>
         </div>
       </div>
-
-      <!-- Q2 -->
-      <div class="quiz-q" id="qq2">
-        <div class="q-text">2. On average, how many diapers does a newborn use per day?</div>
+      <!-- PQ2 -->
+      <div class="quiz-q" id="pq2">
+        <div class="q-text">🍼 How much is a can of <strong>Milk Formula</strong>?</div>
         <div class="quiz-options">
-          <div class="quiz-opt" onclick="answerQuiz(2,this,'4-6')">4–6</div>
-          <div class="quiz-opt" onclick="answerQuiz(2,this,'8-12')">8–12</div>
-          <div class="quiz-opt" onclick="answerQuiz(2,this,'2-3')">2–3</div>
-          <div class="quiz-opt" onclick="answerQuiz(2,this,'15+')">15+</div>
+          <div class="quiz-opt" onclick="answerPrice(2,this,'50 AED')">50 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(2,this,'80 AED')">80 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(2,this,'120 AED')">120 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(2,this,'200 AED')">200 AED</div>
         </div>
       </div>
-
-      <!-- Q3 -->
-      <div class="quiz-q" id="qq3">
-        <div class="q-text">3. What does "lullaby" literally mean?</div>
+      <!-- PQ3 -->
+      <div class="quiz-q" id="pq3">
+        <div class="q-text">🧻 How much is a pack of <strong>Baby Wipes</strong>?</div>
         <div class="quiz-options">
-          <div class="quiz-opt" onclick="answerQuiz(3,this,'Sleep little one')">Sleep little one</div>
-          <div class="quiz-opt" onclick="answerQuiz(3,this,'Goodnight song')">Goodnight song</div>
-          <div class="quiz-opt" onclick="answerQuiz(3,this,'Hush hush baby')">Hush hush baby</div>
-          <div class="quiz-opt" onclick="answerQuiz(3,this,'Dream little child')">Dream little child</div>
+          <div class="quiz-opt" onclick="answerPrice(3,this,'5 AED')">5 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(3,this,'10 AED')">10 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(3,this,'20 AED')">20 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(3,this,'35 AED')">35 AED</div>
         </div>
       </div>
-
-      <!-- Q4 -->
-      <div class="quiz-q" id="qq4">
-        <div class="q-text">4. What is the magical word that parents whisper to their newborn first?</div>
+      <!-- PQ4 -->
+      <div class="quiz-q" id="pq4">
+        <div class="q-text">📄 How much does a <strong>Baby Visa</strong> cost?</div>
         <div class="quiz-options">
-          <div class="quiz-opt" onclick="answerQuiz(4,this,'Welcome')">Welcome</div>
-          <div class="quiz-opt" onclick="answerQuiz(4,this,'Hello')">Hello</div>
-          <div class="quiz-opt" onclick="answerQuiz(4,this,'Love')">Love</div>
-          <div class="quiz-opt" onclick="answerQuiz(4,this,'Forever')">Forever</div>
+          <div class="quiz-opt" onclick="answerPrice(4,this,'500 AED')">500 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(4,this,'800 AED')">800 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(4,this,'1200 AED')">1,200 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(4,this,'2000 AED')">2,000 AED</div>
+        </div>
+      </div>
+      <!-- PQ5 -->
+      <div class="quiz-q" id="pq5">
+        <div class="q-text">🧴 How much is <strong>Cetaphil Baby Shampoo</strong>?</div>
+        <div class="quiz-options">
+          <div class="quiz-opt" onclick="answerPrice(5,this,'35 AED')">35 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(5,this,'55 AED')">55 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(5,this,'70 AED')">70 AED</div>
+          <div class="quiz-opt" onclick="answerPrice(5,this,'90 AED')">90 AED</div>
         </div>
       </div>
     </div>
 
-    <div style="text-align:center;margin-top:16px">
-      <button class="btn-sm" onclick="checkQuiz()">Submit Answers</button>
+    <div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-sm" onclick="checkPrice()">Submit Guesses 🎯</button>
+      <button class="btn-sm" onclick="resetPrice()" style="background:rgba(255,255,255,0.05);">🔄 Reset</button>
     </div>
 
-    <div class="feedback" id="quizFeedback"></div>
+    <div class="feedback" id="priceFeedback"></div>
 
     <div class="quest-complete-banner" id="q3Banner">
       <div>🎉 Quest Complete! Your word is...</div>
@@ -849,36 +919,98 @@
 </div>
 
 <!-- ════════════════════════════════════════
-     SCREEN 6: QUEST 4 – BABY RIDDLE
+     SCREEN 6: QUEST 4 – WHO'S MOST LIKELY
 ════════════════════════════════════════ -->
 <div class="screen" id="quest4">
   <button class="back-btn" onclick="showScreen('hub')">← Hub</button>
   <div class="quest-screen">
     <div class="quest-header">
       <div class="quest-number">QUEST 04</div>
-      <div class="quest-title">🌙 Baby Riddle</div>
-      <div class="quest-desc">Solve the final riddle to get your last word...</div>
+      <div class="quest-title">👶 Who's Most Likely?</div>
+      <div class="quest-desc">For each question, vote: Papi or Momma? Match all correct answers to unlock the code!</div>
     </div>
 
-    <div class="riddle-box">
-      <div class="riddle-text">
-        "I am not alive, but I grow with love.<br>
-        I don't have a voice, but I make you hum.<br>
-        I fit in a hand yet fill a heart whole.<br>
-        Parents await me — I'm their greatest role.<br><br>
-        What am I?"
+    <div class="score-display">Score: <span id="likelyScore">0</span> / 10</div>
+
+    <div id="likelyQuestions">
+      <div class="quiz-q" id="lq1">
+        <div class="q-text">1. Who's most likely to <strong>spoil the baby</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(1,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(1,this,'Momma')">💕 Momma</div>
+        </div>
       </div>
-      <input class="riddle-input" id="riddleInput" type="text" placeholder="Your answer..." 
-        oninput="this.value=this.value.toUpperCase()"/>
-      <br><br>
-      <button class="btn-sm" onclick="checkRiddle()">Submit Answer</button>
+      <div class="quiz-q" id="lq2">
+        <div class="q-text">2. Who's most likely to <strong>wake up first when the baby cries</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(2,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(2,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq3">
+        <div class="q-text">3. Who's most likely to <strong>take more baby pictures</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(3,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(3,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq4">
+        <div class="q-text">4. Who's most likely to <strong>forget where they put the diaper bag</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(4,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(4,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq5">
+        <div class="q-text">5. Who's most likely to <strong>cry during the baby's first day of school</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(5,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(5,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq6">
+        <div class="q-text">6. Who's most likely to <strong>dress the baby in mismatched clothes</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(6,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(6,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq7">
+        <div class="q-text">7. Who's most likely to <strong>fall asleep during story time</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(7,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(7,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq8">
+        <div class="q-text">8. Who's most likely to <strong>buy unnecessary baby toys</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(8,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(8,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq9">
+        <div class="q-text">9. Who's most likely to <strong>teach the baby silly dances</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(9,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(9,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
+      <div class="quiz-q" id="lq10">
+        <div class="q-text">10. Who's most likely to <strong>panic over a tiny sneeze</strong>?</div>
+        <div class="quiz-options" style="flex-direction:row;justify-content:center;gap:16px">
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(10,this,'Papi')">😎 Papi</div>
+          <div class="quiz-opt" style="min-width:120px;text-align:center" onclick="answerLikely(10,this,'Momma')">💕 Momma</div>
+        </div>
+      </div>
     </div>
 
-    <p style="text-align:center;font-size:0.75rem;color:#6050a0;margin-top:8px;">
-      Hint: Think of what you're waiting for tonight... 🌟
-    </p>
+    <div style="text-align:center;margin-top:16px;display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+      <button class="btn-sm" onclick="checkLikely()">Submit Answers 👶</button>
+      <button class="btn-sm" onclick="resetLikely()" style="background:rgba(255,255,255,0.05);">🔄 Reset</button>
+    </div>
 
-    <div class="feedback" id="riddleFeedback"></div>
+    <div class="feedback" id="likelyFeedback"></div>
 
     <div class="quest-complete-banner" id="q4Banner">
       <div>🎉 Quest Complete! Your word is...</div>
@@ -900,9 +1032,15 @@
     </div>
 
     <div class="hint-box">
-      💡 <strong>Collected Words:</strong><br>
-      <div id="finalCollectedWords" style="margin-top:8px;font-family:'Space Mono',monospace;color:var(--gold);font-size:0.9rem;">
-        Enter each word you discovered from the quests below ↓
+      💡 <strong>Hints for the 4 words:</strong><br>
+      <div style="margin-top:8px;font-size:0.8rem;color:#d0c090;line-height:2">
+        🔑 Quest 1: Father's birth month<br>
+        🔑 Quest 2: Mother's birth month<br>
+        🔑 Quest 3: First pregnancy craving<br>
+        🔑 Quest 4: Age when got pregnant (number)
+      </div>
+      <div id="finalCollectedWords" style="margin-top:12px;font-family:'Space Mono',monospace;color:var(--gold);font-size:0.9rem;">
+        Complete quests to auto-fill ↓
       </div>
     </div>
 
@@ -961,10 +1099,10 @@ const SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_URL_HERE';
 
 // ─── ANSWERS (the secret words from each quest) ───
 const QUEST_WORDS = {
-  1: 'SINGKAMAS',  // Q1 Lullaby
-  2: 'LOVE',       // Q2 Toolkit
-  3: 'WELCOME',    // Q3 Quiz
-  4: 'BABY'        // Q4 Riddle
+  1: 'SEPTEMBER',  // Q1 Lullaby  — hint: father's birth month
+  2: 'FEBRUARY',   // Q2 Toolkit  — hint: mother's birth month
+  3: 'SINGKAMAS',  // Q3 Bet      — hint: first pregnancy cravings
+  4: '29'          // Q4 Likely   — hint: age got pregnant
 };
 
 // Final code = all 4 words combined (order doesn't matter, we check set)
@@ -974,17 +1112,6 @@ const FINAL_WORDS_SET = Object.values(QUEST_WORDS).map(w=>w.toUpperCase());
 const state = {
   completed: {1:false, 2:false, 3:false, 4:false},
   collectedWords: {},
-  toolkitSelected: [],
-  quizAnswered: {},
-  quizScore: 0,
-};
-
-// Quiz answers
-const QUIZ_CORRECT = {
-  1: 'Pickles & Ice Cream',
-  2: '8-12',
-  3: 'Hush hush baby',
-  4: 'Love'
 };
 
 // ─── STARFIELD ───
@@ -1153,87 +1280,178 @@ function checkAllSongsDone(){
   }
 }
 
-// ════ QUEST 2: TOOLKIT ════
-const toolkitOrder = [];
-
-function selectTool(el, item){
-  if(state.completed[2]) return;
-  if(el.classList.contains('selected')){
-    // Deselect
-    const idx = toolkitOrder.indexOf(item);
-    if(idx>-1) toolkitOrder.splice(idx,1);
-    el.classList.remove('selected');
-  } else {
-    if(toolkitOrder.length>=3){ showToast('Select only 3 items!'); return; }
-    toolkitOrder.push(item);
-    el.classList.add('selected');
-  }
-  document.getElementById('toolkitSelected').textContent =
-    'Selected: ' + (toolkitOrder.length ? toolkitOrder.join(' → ') : '—');
+function resetLullaby(){
+  Object.keys(songQState).forEach(k=>{ songQState[k]=false; });
+  [1,2,3].forEach(i=>{
+    document.getElementById('sq'+i).style.display='none';
+    document.getElementById('sq'+i+'trigger').style.display='block';
+    const feedback = document.getElementById('sq'+i+'Feedback');
+    if(feedback) feedback.className='feedback';
+    const step = document.getElementById('sstep'+i);
+    step.classList.remove('active','done');
+  });
+  // Reset answer buttons
+  document.querySelectorAll('.answer-btn').forEach(b=>{
+    b.className='answer-btn'; b.style.pointerEvents='';
+  });
+  const busInput = document.getElementById('busDriverInput');
+  if(busInput){ busInput.value=''; busInput.style.borderColor=''; }
+  document.getElementById('sq2Feedback') && (document.getElementById('sq2Feedback').className='feedback');
+  switchSong(1);
+  document.getElementById('q1Banner').classList.remove('show');
+  document.getElementById('q1Word').textContent='';
 }
 
-function resetToolkit(){
-  toolkitOrder.length=0;
-  document.querySelectorAll('.tool-card').forEach(c=>c.classList.remove('selected'));
-  document.getElementById('toolkitSelected').textContent='Selected: —';
-  document.getElementById('toolkitFeedback').className='feedback';
-}
+// ════ QUEST 2: BABY TOOLKIT TRIVIA ════
+const TRIVIA_CORRECT = {
+  1: 'Baby Wipes',
+  2: 'Baby Nail Trimmer',
+  3: 'Digital Baby Thermometer',
+  4: 'Burp Cloth',
+  5: 'Teether',
+  6: 'Nasal Aspirator',
+  7: 'Diaper Bag',
+  8: 'Baby Hooded Towel'
+};
+const triviaAnswered = {};
+let triviaScore = 0;
 
-function checkToolkit(){
-  if(state.completed[2]) return;
-  const correct = ['Diaper','Bottle','Blanket'];
-  if(JSON.stringify(toolkitOrder)===JSON.stringify(correct)){
-    showFeedback('toolkitFeedback','🍼 Perfect! You know what every baby needs — wrapped in LOVE!','success');
-    completeQuest(2);
-  } else if(toolkitOrder.length<3){
-    showFeedback('toolkitFeedback','Select exactly 3 items in the right order!','error');
-  } else {
-    showFeedback('toolkitFeedback','Not quite right! Think about newborn essentials in order of urgency... 👶','error');
-  }
-}
-
-// ════ QUEST 3: QUIZ ════
-function answerQuiz(qn, el, answer){
-  if(state.quizAnswered[qn]) return;
-  state.quizAnswered[qn] = answer;
-
+function answerTrivia(qn, el, answer){
+  if(triviaAnswered[qn]) return;
+  triviaAnswered[qn] = answer;
   const opts = el.parentElement.querySelectorAll('.quiz-opt');
   opts.forEach(o=>{
-    if(o.textContent===QUIZ_CORRECT[qn]) o.classList.add('correct');
-    else if(o===el && answer!==QUIZ_CORRECT[qn]) o.classList.add('wrong');
+    if(o.textContent===TRIVIA_CORRECT[qn]) o.classList.add('correct');
+    else if(o===el && answer!==TRIVIA_CORRECT[qn]) o.classList.add('wrong');
     o.style.pointerEvents='none';
   });
-
-  if(answer===QUIZ_CORRECT[qn]) state.quizScore++;
-  document.getElementById('quizScore').textContent=state.quizScore;
+  if(answer===TRIVIA_CORRECT[qn]) triviaScore++;
+  document.getElementById('triviaScore').textContent=triviaScore;
 }
 
-function checkQuiz(){
-  if(state.completed[3]) return;
-  const answered = Object.keys(state.quizAnswered).length;
-  if(answered<4){ showFeedback('quizFeedback','Answer all 4 questions first!','info'); return; }
+function checkTrivia(){
+  if(state.completed[2]) return;
+  const answered = Object.keys(triviaAnswered).length;
+  if(answered<8){ showFeedback('triviaFeedback','Answer all 8 questions first! 🍼','info'); return; }
+  if(triviaScore>=6){
+    showFeedback('triviaFeedback','🍼 Amazing! You scored '+triviaScore+'/8 — you know your baby toolkit!','success');
+    completeQuest(2);
+  } else {
+    showFeedback('triviaFeedback','You scored '+triviaScore+'/8. Need at least 6 to pass. Try again!','error');
+  }
+}
 
-  if(state.quizScore>=3){
-    showFeedback('quizFeedback','🎯 Amazing! You scored '+state.quizScore+'/4 — you\'re ready to be the best ninong/ninang!','success');
+function resetTrivia(){
+  Object.keys(triviaAnswered).forEach(k=>delete triviaAnswered[k]);
+  triviaScore=0;
+  document.getElementById('triviaScore').textContent='0';
+  for(let i=1;i<=8;i++){
+    const opts = document.querySelectorAll('#tq'+i+' .quiz-opt');
+    opts.forEach(o=>{ o.className='quiz-opt'; o.style.pointerEvents=''; });
+  }
+  document.getElementById('triviaFeedback').className='feedback';
+}
+
+// ════ QUEST 3: BET ON YOUR BABY (PRICE GUESSING) ════
+const PRICE_CORRECT = {
+  1: '50 AED',
+  2: '80 AED',
+  3: '10 AED',
+  4: '1200 AED',
+  5: '70 AED'
+};
+const priceAnswered = {};
+let priceScore = 0;
+
+function answerPrice(qn, el, answer){
+  if(priceAnswered[qn]) return;
+  priceAnswered[qn] = answer;
+  const opts = el.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>{
+    if(o.textContent.replace(/,/g,'')===PRICE_CORRECT[qn] || o.textContent===PRICE_CORRECT[qn])
+      o.classList.add('correct');
+    else if(o===el && answer!==PRICE_CORRECT[qn]) o.classList.add('wrong');
+    o.style.pointerEvents='none';
+  });
+  const norm = answer.replace(/,/g,'');
+  if(norm===PRICE_CORRECT[qn]) priceScore++;
+  document.getElementById('priceScore').textContent=priceScore;
+}
+
+function checkPrice(){
+  if(state.completed[3]) return;
+  const answered = Object.keys(priceAnswered).length;
+  if(answered<5){ showFeedback('priceFeedback','Guess all 5 prices first! 🎯','info'); return; }
+  if(priceScore>=3){
+    showFeedback('priceFeedback','🎯 You got '+priceScore+'/5! You really know your baby budget!','success');
     completeQuest(3);
   } else {
-    showFeedback('quizFeedback','You scored '+state.quizScore+'/4. Need 3+ to pass. Try studying baby facts!','error');
+    showFeedback('priceFeedback','You got '+priceScore+'/5. Need 3 correct to pass — try again!','error');
   }
 }
 
-// ════ QUEST 4: RIDDLE ════
-function checkRiddle(){
-  if(state.completed[4]) return;
-  const ans = document.getElementById('riddleInput').value.trim().toUpperCase();
-  const accepted = ['BABY','A BABY','CHILD','A CHILD','NEWBORN'];
-  if(accepted.some(a=>ans.includes(a))){
-    showFeedback('riddleFeedback','🌙 Brilliant! You solved the riddle — it\'s a BABY, of course!','success');
-    completeQuest(4);
-  } else if(ans===''){
-    showFeedback('riddleFeedback','Type your answer above!','info');
-  } else {
-    showFeedback('riddleFeedback','Hmm, not quite... Think about what you\'re celebrating tonight! 🌟','error');
+function resetPrice(){
+  Object.keys(priceAnswered).forEach(k=>delete priceAnswered[k]);
+  priceScore=0;
+  document.getElementById('priceScore').textContent='0';
+  for(let i=1;i<=5;i++){
+    const opts = document.querySelectorAll('#pq'+i+' .quiz-opt');
+    opts.forEach(o=>{ o.className='quiz-opt'; o.style.pointerEvents=''; });
   }
+  document.getElementById('priceFeedback').className='feedback';
+}
+
+// ════ QUEST 4: WHO'S MOST LIKELY ════
+const LIKELY_CORRECT = {
+  1: 'Papi',
+  2: 'Momma',
+  3: 'Momma',
+  4: 'Papi',
+  5: 'Momma',
+  6: 'Papi',
+  7: 'Papi',
+  8: 'Papi',
+  9: 'Papi',
+  10: 'Momma'
+};
+const likelyAnswered = {};
+let likelyScore = 0;
+
+function answerLikely(qn, el, answer){
+  if(likelyAnswered[qn]) return;
+  likelyAnswered[qn] = answer;
+  const opts = el.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(o=>{
+    const oVal = o.textContent.includes('Papi') ? 'Papi' : 'Momma';
+    if(oVal===LIKELY_CORRECT[qn]) o.classList.add('correct');
+    else if(o===el && answer!==LIKELY_CORRECT[qn]) o.classList.add('wrong');
+    o.style.pointerEvents='none';
+  });
+  if(answer===LIKELY_CORRECT[qn]) likelyScore++;
+  document.getElementById('likelyScore').textContent=likelyScore;
+}
+
+function checkLikely(){
+  if(state.completed[4]) return;
+  const answered = Object.keys(likelyAnswered).length;
+  if(answered<10){ showFeedback('likelyFeedback','Answer all 10 questions first! 👶','info'); return; }
+  if(likelyScore>=7){
+    showFeedback('likelyFeedback','👶 You got '+likelyScore+'/10! You know Papi & Momma so well!','success');
+    completeQuest(4);
+  } else {
+    showFeedback('likelyFeedback','You got '+likelyScore+'/10. Need 7+ to pass — how well do you know them? 😄','error');
+  }
+}
+
+function resetLikely(){
+  Object.keys(likelyAnswered).forEach(k=>delete likelyAnswered[k]);
+  likelyScore=0;
+  document.getElementById('likelyScore').textContent='0';
+  for(let i=1;i<=10;i++){
+    const opts = document.querySelectorAll('#lq'+i+' .quiz-opt');
+    opts.forEach(o=>{ o.className='quiz-opt'; o.style.pointerEvents=''; });
+  }
+  document.getElementById('likelyFeedback').className='feedback';
 }
 
 // ════ FINAL QUEST ════
@@ -1341,9 +1559,7 @@ function saveProgress(){
   try {
     localStorage.setItem('brER_state', JSON.stringify({
       completed: state.completed,
-      collectedWords: state.collectedWords,
-      quizAnswered: state.quizAnswered,
-      quizScore: state.quizScore
+      collectedWords: state.collectedWords
     }));
   } catch(e){}
 
@@ -1383,21 +1599,6 @@ function loadProgress(){
       const s = JSON.parse(saved);
       Object.assign(state.completed, s.completed||{});
       Object.assign(state.collectedWords, s.collectedWords||{});
-      Object.assign(state.quizAnswered, s.quizAnswered||{});
-      state.quizScore = s.quizScore||0;
-
-      // Restore quiz UI
-      if(s.quizScore) document.getElementById('quizScore').textContent=s.quizScore;
-
-      // Restore quiz answered state visually
-      Object.entries(s.quizAnswered||{}).forEach(([qn,ans])=>{
-        const opts = document.querySelectorAll(`#qq${qn} .quiz-opt`);
-        opts.forEach(o=>{
-          if(o.textContent===QUIZ_CORRECT[parseInt(qn)]) o.classList.add('correct');
-          else if(o.textContent===ans) o.classList.add('wrong');
-          o.style.pointerEvents='none';
-        });
-      });
     }
   } catch(e){}
 }
